@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f3d2b"><title>Blisko 4.0.1</title>
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f3d2b"><title>Blisko 4.1</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Roboto,sans-serif;background:#f6f3ea;color:#1b2b21}
 header{background:#2f6b45;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:500;display:flex;align-items:center;gap:8px}
@@ -34,6 +34,56 @@ select,input,textarea{border-color:#d8d2bd;background:#fffefa}input:focus,select
 .dr{background:#eef4ea;border:1px solid #b9d3b5;border-radius:14px;padding:10px;font-size:13px;margin-bottom:10px;color:#1f3d2b}
 .tot{white-space:nowrap;text-align:right;font-size:18px;color:#1f3d2b;font-weight:700}.bd{font-size:12px;color:#56655b}
 @media(min-width:800px){body{background-color:#e9e4d4}header,main,nav{max-width:760px;margin-left:auto;margin-right:auto}main{background:#f6f3eacc;min-height:100vh;box-shadow:0 0 24px #1f3d2b14}nav{left:50%;transform:translateX(-50%);width:760px;border-radius:14px 14px 0 0}#toast{max-width:736px;margin:0 auto}#map{height:520px}}
+/* ===== v4.1 clarity redesign ===== */
+:root{--g:#1f5c3a;--g2:#174a2e;--gl:#e6f0e3;--bg:#f6f3ea;--tx:#17251c;--mut:#4a5a50;--line:#ddd6c1}
+body{font-size:16px;line-height:1.45;color:var(--tx)}
+.muted{color:var(--mut);font-size:14px}
+header{padding:10px 16px}header h1{font-size:20px}
+#loc{display:none}#loc.on{display:inline-block}
+main{padding:14px 14px 96px}
+.card{padding:16px;margin-bottom:12px}.card h3{font-size:18px;margin-bottom:8px}
+h2.sec{font:600 22px Georgia,'Noto Serif',serif;color:var(--g2);margin:4px 0 12px}
+nav button{font-size:12px;padding:7px 0 8px;color:var(--mut)}nav button svg{display:block;margin:0 auto 2px;width:24px;height:24px}
+nav button.on{color:var(--g2);font-weight:700}nav button.on svg{background:var(--gl);border-radius:10px;padding:2px 10px;width:44px;box-sizing:content-box}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.chip{border:1.5px solid var(--g);background:#fff;color:var(--g);border-radius:999px;padding:8px 14px;font-size:15px;font-weight:600;min-height:40px;cursor:pointer}
+.chip.on{background:var(--g);color:#fff}
+.segi{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--g);border-radius:12px;overflow:hidden;margin:6px 0 14px}
+.segi button{border:0;background:#fff;color:var(--g);padding:9px 2px;font-size:13px;font-weight:600;border-left:1px solid var(--line);cursor:pointer}.segi button:first-child{border-left:0}
+.segi button.on{background:var(--g);color:#fff}.segi svg{display:block;margin:0 auto 2px;width:22px;height:22px}
+.flabel{display:block;font-size:14px;font-weight:700;color:var(--tx);margin-top:4px}
+.startrow{display:flex;gap:8px}.startrow input{font-size:18px;padding:13px 14px;margin:6px 0 12px;border-width:1.5px}
+.gpsb{flex:0 0 52px;margin:6px 0 12px;border-radius:12px;border:1.5px solid var(--g);background:#fff;color:var(--g);cursor:pointer}
+.bigbtn{width:100%;font-size:17px;padding:14px;border-radius:12px;background:var(--g);color:#fff;border:0;font-weight:700;cursor:pointer}.bigbtn[disabled]{opacity:.7}
+details.adv{border-top:1px solid var(--line);margin-top:6px;padding-top:8px}details.adv summary{cursor:pointer;font-weight:700;color:var(--g);padding:6px 0}
+.err{background:#fdecec;border:1px solid #e3a3a3;color:#7f1d1d;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:15px}
+.note{background:#fbf6e6;border:1px solid #e3d4a3;color:#3d3420;border-radius:12px;padding:9px 12px;font-size:14px;margin-bottom:10px}
+.summary{background:var(--g);color:#fff;border-radius:14px;padding:12px 16px;margin-bottom:12px;font-size:16px}.summary b{font-size:18px}.summary small{display:block;opacity:.9;font-size:13px;margin-top:2px}
+.pc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.pc .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.pc .nm{font-weight:700;font-size:17px;line-height:1.3}.pc .city{color:var(--mut);font-size:14px;margin-top:2px}
+.pc .price{text-align:right;white-space:nowrap}.pc .price b{display:block;font-size:22px;color:var(--g2)}.pc .price span{font-size:12px;color:var(--mut)}
+.pc .call{font-size:13px;font-weight:700;color:#8a3b12;text-align:right}
+.ichips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}.ichip{background:var(--gl);color:var(--g2);border-radius:8px;padding:4px 9px;font-size:13px;font-weight:600}.ichip.w{background:#fbf0d9;color:#6b4a07}
+.acts{display:flex;flex-wrap:wrap;gap:8px}.acts a,.acts button{flex:1 1 auto;text-align:center;border:1.5px solid var(--g);color:var(--g);background:#fff;border-radius:10px;padding:8px 10px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer}
+.acts .pri{background:var(--g);color:#fff}
+.pc details{margin-top:8px}.pc details summary{cursor:pointer;color:var(--g);font-size:14px;font-weight:600}
+.morelist a{display:flex;align-items:center;gap:12px;padding:16px;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;color:var(--tx);text-decoration:none;font-size:17px;font-weight:600}
+.morelist svg{width:26px;height:26px;color:var(--g)}
+#map.rmap{height:300px;margin-bottom:12px}#srres{scroll-margin-top:72px}
+@media(min-width:900px){
+ body{padding-left:232px;background-color:var(--bg)}
+ header{max-width:none!important;margin:0!important;position:sticky}
+ main{max-width:1180px!important;margin:0 auto!important;padding:22px 28px 40px;background:none!important;box-shadow:none!important;min-height:0}
+ nav{top:0;bottom:0;left:0!important;right:auto;width:232px!important;max-width:none!important;transform:none!important;flex-direction:column;justify-content:flex-start;padding:76px 12px 12px;border-radius:0!important;border-top:0;border-right:1px solid var(--line);z-index:400}
+ nav button{flex:0 0 auto;display:flex;align-items:center;gap:12px;text-align:left;font-size:16px;padding:11px 14px;border-radius:12px;margin-bottom:2px;white-space:normal}
+ nav button svg{margin:0;width:22px;height:22px}nav button.on{background:var(--gl)}nav button.on svg{background:none;padding:0;width:22px}
+ nav button[data-k=more]{display:none}nav button.dsk{display:flex!important}
+ .sgrid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}.sgrid>.sform{position:sticky;top:76px}
+ #map.rmap{height:380px}#toast{left:auto;right:24px;max-width:420px}
+}
+nav button.dsk{display:none}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head><body>
@@ -502,7 +552,71 @@ async function doSearch(){if(SR.loading&&SR.step!='Pobieram pozycję GPS…')ret
   L.forEach(x=>x.d=dist(g.lat,g.lon,x.lat,x.lon));L.sort((a,b)=>a.d-b.d);const r={g,cc,L,src:cc=='DE'?'de':'osm',total:L.length};
   if(SR.tmax<600)await travel(r);SR.res=r}
  catch(e){console.error('Blisko search',e);SR.err=(e&&e.message)||String(e)}
- SR.loading=false;SR.step='';render();setTimeout(()=>{const e=document.getElementById('srres');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+ SR.loading=false;SR.step='';render();if(innerWidth<900)setTimeout(()=>{const e=document.getElementById('srres');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+
+/* ===== v4.1 clarity redesign: nav, header, search UI ===== */
+const IC={szukaj:'<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>',ceny:'<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15.9V19h-2v-1.1c-1.7-.3-3-1.4-3.1-3h2c.1.8.9 1.4 2.1 1.4 1.3 0 2-.6 2-1.4 0-.7-.5-1.1-2.2-1.5-2-.5-3.5-1.2-3.5-3 0-1.4 1.1-2.5 2.7-2.8V6.5h2v1.1c1.6.3 2.6 1.4 2.7 2.8h-2c-.1-.8-.8-1.3-1.9-1.3s-1.7.5-1.7 1.2c0 .6.5 1 2.2 1.4 2 .5 3.5 1.2 3.5 3.1 0 1.5-1.1 2.6-2.8 2.9z"/>',promo:'<path d="M21.4 11.6l-9-9A2 2 0 0 0 11 2H4a2 2 0 0 0-2 2v7c0 .6.2 1.1.6 1.4l9 9a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8zM6.5 8A1.5 1.5 0 1 1 6.5 5a1.5 1.5 0 0 1 0 3z"/>',trips:'<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/>',more:'<path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>',map:'<path d="M15 5.1L9 3 3 5v16l6-2.1 6 2.1 6-2V3zM15 19l-6-2.1V5l6 2.1z"/>',biz:'<path d="M4 4h16l1 5a3 3 0 0 1-2 2.8V20H5v-8.2A3 3 0 0 1 3 9zm3 9v5h4v-5z"/>',info:'<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/>',set:'<path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L15 3h-4l-.4 2.9a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.2 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.9c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>',
+ car:'<path d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H8v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1zm2.5 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM7 10h10l-1-3H8z"/>',pt:'<path d="M12 2c-4 0-8 .5-8 4v9.5A3.5 3.5 0 0 0 7.5 19L6 20.5v.5h12v-.5L16.5 19a3.5 3.5 0 0 0 3.5-3.5V6c0-3.5-4-4-8-4zM7.5 17a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3.5-7H6V6h5zm2 0V6h5v4zm3.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>',bike:'<path d="M15.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM5 12a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zm5.8-10.1l2.4-2.4.8.8A6 6 0 0 0 19 11V9a4 4 0 0 1-3-1.3l-2-2a2 2 0 0 0-1.4-.6c-.5 0-1 .2-1.4.6L8.4 8.4a2 2 0 0 0 0 2.8L11 13v5h2v-6.2zM19 12a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>',foot:'<path d="M13.5 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3A7.3 7.3 0 0 0 19 13v-2a5 5 0 0 1-4.3-2.4l-1-1.6a2 2 0 0 0-1.7-1c-.3 0-.5.1-.8.1L6 8.3V13h2V9.6z"/>',gps:'<path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm9 3h-2.1A7 7 0 0 0 13 5.1V3h-2v2.1A7 7 0 0 0 5.1 11H3v2h2.1a7 7 0 0 0 5.9 5.9V21h2v-2.1a7 7 0 0 0 5.9-5.9H21zm-9 6a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>'};
+const svg=k=>`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${IC[k]||''}</svg>`;
+Object.assign(T.pl,{szukaj:'Apteki',more:'Więcej',ceny:'Ceny'});Object.assign(T.en,{szukaj:'Pharmacies',more:'More'});Object.assign(T.nl,{szukaj:'Apotheken',more:'Meer'});
+TABS.splice(0,TABS.length,['szukaj',''],['ceny',''],['promo',''],['trips',''],['more','']);
+const MORE=['map','biz','info','set'];
+if(!location.hash)tab='szukaj';
+const _render0=render;
+render=function(){_render0();
+ const nav=document.getElementById('nav');
+ nav.innerHTML=TABS.map(([k])=>`<button data-k="${k}" class="${tab==k||(k=='more'&&MORE.includes(tab))?'on':''}" onclick="go('${k}')" aria-label="${t(k)}">${svg(k)}<span>${t(k)}</span></button>`).join('')+MORE.map(k=>`<button data-k="${k}" class="dsk ${tab==k?'on':''}" onclick="go('${k}')">${svg(k)}<span>${t(k)}</span></button>`).join('');
+ const loc=document.getElementById('loc');if(loc){const h=S.home&&S.home.name;loc.className='pill'+(h?' on':'');loc.textContent=h?'Start: '+h.split(',')[0]:'';loc.onclick=()=>go('szukaj')}
+ const a=document.getElementById('app');
+ if(tab=='more')a.innerHTML=`<h2 class="sec">${t('more')}</h2><div class="morelist">${MORE.map(k=>`<a href="#" onclick="go('${k}');return false">${svg(k)}${t(k)}</a>`).join('')}</div>`;
+ if(tab=='info')a.insertAdjacentHTML('beforeend',`<div class="card"><h3>Jak liczymy czas i koszt dojazdu</h3><p class="muted">Czas dojazdu: OSRM (routing.openstreetmap.de, router.project-osrm.org) dla auta, roweru i pieszo. Komunikacja publiczna: szacunek (odległość × 1,3; 30–75 km/h + 25 min na dojścia i przesiadki) – nie rozkład jazdy. Gdy serwer tras nie odpowiada, czas szacujemy z odległości w linii prostej. Koszt: paliwo 7 l/100 km × 1,85 €/l, bilet ok. 0,17 €/km, tam i z powrotem. Geokodowanie: © OpenStreetMap / Nominatim, zapasowo Photon (komoot). Apteki: cannapreis.de (DE), OpenStreetMap (pozostałe kraje).</p></div>`)};
+const _go0=go;go=function(x){if(x=='more'&&innerWidth>=900)x='map';_go0(x)};
+/* ---- search ---- */
+SR.ui=SR.ui||{custom:false};
+function setCountry(c){if(c=='auto'){SR.other=false}else if(c=='other'){SR.other=true;SR.pick=true;if(['DE','PL','NL'].includes(SR.cc))SR.cc='BE'}else{SR.other=true;SR.pick=false;SR.cc=c}render()}
+function gmaps(x){const m={car:'driving',bike:'bicycling',foot:'walking',pt:'transit'}[SR.mode];const o=SR.res?`&origin=${SR.res.g.lat},${SR.res.g.lon}`:'';return `https://www.google.com/maps/dir/?api=1${o}&destination=${x.lat},${x.lon}&travelmode=${m}`}
+function showOnMap(i){const m=window._mk&&window._mk[i];if(m&&map){document.getElementById('map').scrollIntoView({behavior:'smooth',block:'center'});map.setView(m.getLatLng(),14);m.openPopup()}}
+renderSearch=function(a,h18){const r=SR.res;const cc=SR.other?SR.cc:'auto';const ccSel=SR.other&&(SR.pick||!['DE','PL','NL'].includes(SR.cc));
+ const times=[[30,'30 min'],[60,'1 h'],[120,'2 h'],[180,'3 h'],[240,'4 h'],[999,'Bez limitu']];const custom=SR.ui.custom||!times.some(([v])=>v==SR.tmax);
+ const form=`<div class="card sform"><h2 class="sec" style="margin-top:0">Znajdź aptekę</h2>
+ <label class="flabel" for="sq">Skąd jedziesz?</label><div class="startrow"><input id="sq" placeholder="${S.home&&S.home.name?'Puste = '+esc(S.home.name.split(',')[0]):'Miasto, np. Papendrecht'}" value="${esc(SR.q)}" enterkeyhint="search" autocomplete="off" onkeydown="if(event.key=='Enter'||event.keyCode==13){event.preventDefault();this.blur();doSearch()}"><button class="gpsb" onclick="srGps()" aria-label="Użyj mojej lokalizacji (GPS)" title="Moja lokalizacja">${svg('gps')}</button></div>
+ <span class="flabel">Apteki w kraju</span><div class="chips">${[['auto','Mój kraj'],['DE','Niemcy'],['PL','Polska'],['NL','Holandia'],['other','Inny…']].map(([k,l])=>`<button class="chip ${(k=='other'?ccSel:(!ccSel&&cc==k))?'on':''}" onclick="setCountry('${k}')">${l}</button>`).join('')}</div>
+ ${ccSel?`<select aria-label="Kraj" onchange="SR.cc=this.value;render()" style="margin-top:-6px">${Object.entries(COUNTRIES).map(([k,n])=>`<option value="${k}" ${SR.cc==k?'selected':''}>${n}</option>`).join('')}</select>`:''}
+ <span class="flabel">Czym</span><div class="segi">${['car','pt','bike','foot'].map(k=>`<button class="${SR.mode==k?'on':''}" onclick="SR.mode='${k}';render()">${svg(k)}${{car:'Auto',pt:'Pociąg*',bike:'Rower',foot:'Pieszo'}[k]}</button>`).join('')}</div>
+ <span class="flabel">Maks. czas dojazdu</span><div class="chips">${times.map(([v,l])=>`<button class="chip ${!custom&&SR.tmax==v?'on':''}" onclick="SR.ui.custom=false;SR.tmax=${v};render()">${l}</button>`).join('')}<button class="chip ${custom?'on':''}" onclick="SR.ui.custom=true;render()">Własny</button></div>
+ ${custom?`<label class="muted">Własny limit: <b>${SR.tmax} min</b></label><input type="range" min="15" max="360" step="15" value="${Math.min(SR.tmax,360)}" oninput="this.previousElementSibling.querySelector('b').textContent=this.value+' min'" onchange="SR.tmax=+this.value;render()">`:''}
+ <details class="adv" ${SR.ui.adv?'open':''} ontoggle="SR.ui.adv=this.open"><summary>Więcej opcji</summary>
+  <div class="grid2"><div><label class="flabel">Ilość (g)</label><input type="number" min="1" value="${SR.qty}" onchange="SR.qty=Math.max(1,+this.value||10);render()"></div><div><label class="flabel">Sortuj wg</label><select onchange="SR.sort=this.value;render()"><option value="price" ${SR.sort=='price'?'selected':''}>ceny łącznej</option><option value="time" ${SR.sort=='time'?'selected':''}>czasu dojazdu</option></select></div></div>
+  <label style="display:flex;align-items:center;gap:8px;font-size:15px"><input type="checkbox" style="width:auto;margin:0" ${SR.fuel?'checked':''} onchange="SR.fuel=this.checked;render()"> Dolicz koszt dojazdu (tam i z powrotem)</label>
+  <p class="muted" style="margin:8px 0 0">* Pociąg/komunikacja = szacunek, nie rozkład jazdy. Szczegóły w zakładce Info.</p></details>
+ <button class="bigbtn" style="margin-top:12px" ${SR.loading?'disabled':''} onclick="doSearch()">${SR.loading?'Szukam…':'Szukaj aptek'}</button>
+ <div id="srstat" class="muted" style="margin-top:6px;font-weight:600" aria-live="polite">${SR.loading?esc(SR.step||''):''}</div>
+ ${SR.err&&!SR.loading?`<div class="err" role="alert">${esc(SR.err)}</div>`:''}</div>`;
+ let res='';
+ if(r){const L=sortRes(r.L),cn=COUNTRIES[r.cc]||r.cc;const priced=L.filter(x=>bestPrice(x)!=null);
+  const tot=x=>{const p=bestPrice(x);return p==null?null:p*SR.qty+tripCost(x)};const cheapest=priced.length?Math.min(...priced.map(tot)):null;
+  const lim=SR.tmax>=600?'':` do ${SR.tmax>=60?(SR.tmax/60).toString().replace('.',',')+' h':SR.tmax+' min'}`;
+  res+=`<div id="srres"></div><div class="summary"><b>${L.length} ${L.length==1?'apteka':(L.length%10>=2&&L.length%10<=4&&(L.length%100<10||L.length%100>=20)?'apteki':'aptek')}${lim}</b>${cheapest!=null?` · najtaniej <b>${fP(cheapest)} €</b>`:' · ceny niedostępne'}<small>Start: ${esc(r.g.name.split(',').slice(0,2).join(','))} → ${esc(cn)} · ${MODES[SR.mode][0].replace(/^\S+\s/,'')}${cheapest!=null?` · ${SR.qty} g${SR.fuel?' + dojazd':''}`:''}</small></div>`;
+  const notes=[...(SR.via?['Tryb zapasowy: serwer Overpass nie odpowiada – apteki z wyszukiwarki Nominatim; lista może być niepełna.']:[]),...(SR.notes||[]),...(CNOTE[r.cc]?[CNOTE[r.cc]]:(r.src=='osm'?['Brak danych o cenach dla tego kraju – pokazujemy apteki z OpenStreetMap. Zadzwoń i zapytaj o konopie na receptę.']:[]))];
+  res+=notes.map(n=>`<div class="note">${esc(n)}</div>`).join('');
+  if(r.cc=='PL'&&PLP)res+=`<details class="pc"><summary>Ceny „od” w Polsce – najtańsze odmiany</summary>${(PLP.products||[]).filter(p=>p.price!=null).sort((x,y)=>x.price-y.price).slice(0,8).map(p=>`<div class="row"><span>${esc(p.name)} · THC ${p.thc??'–'}%<br><small class="muted">opak. ${p.pack} ${p.unit} od ${zl(p.pack_price_from)} zł${p.pharmacies_url?` · <a href="${esc(p.pharmacies_url)}" target="_blank" rel="noopener">gdzie dostępne</a>`:''}</small></span><b>${zl(p.price)} zł/${p.unit}</b></div>`).join('')}<p class="muted">Źródło: receptamarihuana.pl</p></details>`;
+  if(r.cc=='NL')res+=`<details class="pc"><summary>Holandia: cena stała 35 € / 5 g (produkty BMC)</summary><p class="muted">Bedrocan, Bedrobinol, Bedica, Bediol, Bedrolite – 35 € za 5 g (cena zakupu apteki) + BTW 9% + opłata za receptę. Źródło: <a href="https://www.cannabisbureau.nl/patienteninformatie/producten" target="_blank" rel="noopener">BMC</a></p></details>`;
+  if(L.length)res+=`<div id="map" class="rmap"></div>`;
+  res+=L.slice(0,SR.lim).map((x,i)=>{const p=bestPrice(x),tt=tot(x);const city=x.addr||(x.url?'':'');const site=x.web||x.url;
+   return `<div class="pc"><div class="top"><div style="min-width:0"><div class="nm">${i+1}. ${esc(x.name)}</div>${city?`<div class="city">${esc(city)}</div>`:''}</div>
+   <div class="price">${tt!=null?`<b>${fP(tt)} €</b><span>${fP(p)} €/g × ${SR.qty}${tripCost(x)?' + dojazd':''}</span>`:`<div class="call">Ceny niedostępne<br>– zadzwoń</div>`}</div></div>
+   <div class="ichips">${x.tt!=null?`<span class="ichip${x.est?' w':''}">${x.tt>=60?Math.floor(x.tt/60)+' h '+(x.tt%60)+' min':x.tt+' min'}${x.est?' (szac.)':''}</span>`:''}<span class="ichip">${x.km!=null?Math.round(x.km)+' km':fmt(x.d)}</span>${x.offers&&x.offers.length?`<span class="ichip">${x.offers.length} ofert</span>`:''}${x.pickup===true?'<span class="ichip">odbiór osobisty</span>':''}${x.prec=='city'?'<span class="ichip w">lokalizacja przybliżona</span>':''}</div>
+   <div class="acts"><button onclick="showOnMap(${i})">Pokaż na mapie</button><a class="pri" href="${gmaps(x)}" target="_blank" rel="noopener">Nawiguj</a>${site?`<a href="${esc(site)}" target="_blank" rel="noopener">Strona apteki</a>`:''}${x.phone?`<a href="tel:${esc(x.phone)}">Zadzwoń</a>`:''}</div>
+   ${x.offers&&x.offers.length?`<details><summary>Produkty i ceny (${x.offers.length})</summary>${x.offers.slice(0,25).map(o=>`<div class="row" style="font-size:14px"><span>${esc(o.p.name)} · THC ${o.p.thc??'–'}%${o.sale?' <span class="ex">SALE</span>':''}</span><b>${fP(o.price)} €</b></div>`).join('')}</details>`:''}</div>`}).join('');
+  if(!L.length)res+=`<div class="note">Brak aptek w tym limicie czasu. Wybierz dłuższy czas lub „Bez limitu”.</div>`;
+  if(L.length>SR.lim)res+=`<button class="bigbtn" style="background:#fff;color:var(--g);border:1.5px solid var(--g)" onclick="SR.lim+=20;render()">Pokaż więcej (${L.length-SR.lim})</button>`}
+ else if(!SR.loading)res=`<div class="card"><h3>Jak to działa</h3><p class="muted" style="margin:0">Wpisz miasto lub użyj GPS, wybierz kraj i czas dojazdu. Pokażemy najbliższe apteki z medyczną marihuaną – w Niemczech z cenami i łącznym kosztem, w innych krajach listę aptek (ceny: zadzwoń).</p></div>`;
+ a.innerHTML=`<div class="sgrid">${form}<div class="sres">${res}</div></div>`;
+ if(r&&r.L.length&&window.L&&navigator.onLine){const L2=sortRes(r.L).slice(0,SR.lim);map=L.map('map').setView([r.g.lat,r.g.lon],10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+  L.circleMarker([r.g.lat,r.g.lon],{radius:8,color:'#1d4ed8',fillOpacity:.9}).addTo(map).bindPopup('Start');const b=[[r.g.lat,r.g.lon]];window._mk=[];
+  L2.forEach((x,i)=>{b.push([x.lat,x.lon]);const ic=L.divIcon({className:'',html:`<div style="background:#1f5c3a;color:#fff;border:2px solid #fff;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font:700 12px system-ui;box-shadow:0 1px 4px #0006">${i+1}</div>`,iconSize:[26,26],iconAnchor:[13,13]});
+   window._mk[i]=L.marker([x.lat,x.lon],{icon:ic}).addTo(map).bindPopup(`<b>${i+1}. ${esc(x.name)}</b><br>${x.tt!=null?x.tt+' min · ':''}${x.km!=null?Math.round(x.km)+' km':''}${bestPrice(x)!=null?'<br>od '+fP(bestPrice(x))+' €/g':''}`)});
+  try{map.fitBounds(b.slice(0,12),{padding:[24,24]})}catch(e){}}}
 
 render();setTimeout(check,800);loadPrices();loadExtra();addEventListener('online',()=>loadPrices());if(S.age===null)setTimeout(gate,300);
 </script>
