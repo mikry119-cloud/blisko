@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f3d2b"><title>Blisko 4.0</title>
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1f3d2b"><title>Blisko 4.0.1</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Roboto,sans-serif;background:#f6f3ea;color:#1b2b21}
 header{background:#2f6b45;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:500;display:flex;align-items:center;gap:8px}
@@ -368,7 +368,7 @@ async function nomPharm(lat,lon,cc){for(const dd of [0.12,0.4,1.2]){const w=1100
  const u=`https://nominatim.openstreetmap.org/search?format=jsonv2&q=pharmacy&countrycodes=${cc.toLowerCase()}&viewbox=${lon-dd*1.6},${lat+dd},${lon+dd*1.6},${lat-dd}&bounded=1&limit=50&extratags=1&addressdetails=1&email=mikry119-cloud%40users.noreply.github.com`;
  const r=await fetch(u);if(!r.ok)continue;const j=await r.json();const L=j.map(e=>({name:e.name||'Apteka',lat:+e.lat,lon:+e.lon,addr:[e.address?.road,e.address?.house_number,e.address?.city||e.address?.town||e.address?.village].filter(Boolean).join(' '),phone:e.extratags?.phone||e.extratags?.['contact:phone']||'',web:e.extratags?.website||e.extratags?.['contact:website']||'',hours:e.extratags?.opening_hours||''}));if(L.length>=5||dd==1.2)return L}return[]}
 async function overpass(lat,lon,cc){const k='op:'+cc+':'+lat.toFixed(2)+','+lon.toFixed(2);try{const c=JSON.parse(sessionStorage.getItem(k)||'null');if(c){if(c.via)SR.via=c.via;return c.L}}catch(e){}
- let L;try{L=await overpass0(lat,lon,cc)}catch(e){L=await nomPharm(lat,lon,cc);SR.via='Nominatim (Overpass niedostępny)'}try{sessionStorage.setItem(k,JSON.stringify({L,via:SR.via}))}catch(e){}return L}
+ let L;try{L=await overpass0(lat,lon,cc)}catch(e){console.warn('Overpass',e);L=await nomPharm(lat,lon,cc);SR.via='Nominatim (Overpass niedostępny)'}try{sessionStorage.setItem(k,JSON.stringify({L,via:SR.via}))}catch(e){}return L}
 function dePharm(){const idx={};(PR&&PR.products||[]).forEach(p=>{const add=(x,sale)=>{if(!x.url)return;(idx[x.url]=idx[x.url]||[]).push({p,price:x.price,sale})};(p.pharmacies||[]).forEach(x=>add(x,0));(p.sale_pharmacies||[]).forEach(x=>add(x,1))});
  return Object.values(GEO&&GEO.pharmacies||{}).filter(x=>x.lat!=null&&(x.country||'DE')=='DE').map(x=>{const of=(idx[x.url]||[]).filter(o=>o.price!=null).sort((a,b)=>a.price-b.price);return{name:x.name,lat:x.lat,lon:x.lon,addr:[x.street,x.zip,x.city].filter(Boolean).join(' '),prec:x.precision,url:x.url,pickup:x.pickup,offers:of}})}
 async function doSearch(){const q=(document.getElementById('sq')||{}).value||SR.q;if(!q.trim())return;SR.q=q.trim();SR.loading=true;SR.err='';SR.res=null;SR.osrm={};SR.lim=20;render();
@@ -379,12 +379,12 @@ async function doSearch(){const q=(document.getElementById('sq')||{}).value||SR.
 async function osrmTimes(){const r=SR.res;if(!r)return;const top=r.L.slice(0,10);const co=[[r.g.lon,r.g.lat],...top.map(x=>[x.lon,x.lat])].map(c=>c.map(v=>(+v).toFixed(5)).join(',')).join(';');
  try{const j=await (await fetch(`https://router.project-osrm.org/table/v1/driving/${co}?sources=0&annotations=duration`)).json();(j.durations&&j.durations[0]||[]).slice(1).forEach((s,i)=>{if(s!=null)top[i].tt=Math.round(s/60)});render()}catch(e){toast('⚠️ OSRM niedostępny')}}
 function renderSearch(a,h18){const r=SR.res;
- let h=`<div class="card"><h3>🏥 Apteki z medyczną marihuaną – szukaj w Europie</h3><div style="display:flex;gap:6px"><input id="sq" placeholder="Wpisz miasto, np. Papendrecht, Warszawa, Berlin" value="${esc(SR.q)}" onkeydown="if(event.key=='Enter')doSearch()" style="margin:4px 0"><button class="btn" onclick="doSearch()">🔎</button></div>
+ let h=`<div class="card"><h3>🏥 Apteki z medyczną marihuaną – szukaj w Europie</h3><div style="display:flex;gap:6px"><input id="sq" placeholder="Wpisz miasto, np. Papendrecht, Warszawa, Berlin" value="${esc(SR.q)}" enterkeyhint="search" autocomplete="off" onkeydown="if(event.key=='Enter'||event.keyCode==13){event.preventDefault();this.blur();doSearch()}" style="margin:4px 0"><button class="btn" onclick="doSearch()">🔎</button></div>
  <label style="display:flex;align-items:center;gap:6px;font-size:14px"><input type="checkbox" style="width:auto" ${SR.other?'checked':''} onchange="SR.other=this.checked;render()"> szukaj w innym kraju</label>
  ${SR.other?`<select onchange="SR.cc=this.value;if(SR.q)doSearch();else render()">${Object.entries(COUNTRIES).map(([k,n])=>`<option value="${k}" ${SR.cc==k?'selected':''}>${k} – ${n}</option>`).join('')}</select><p class="muted">Najbliższe apteki w wybranym kraju od podanego miasta (np. mieszkasz w NL, szukasz w Niemczech).</p>`:'<p class="muted">Domyślnie: apteki w kraju wpisanego miasta.</p>'}
  <p class="muted" style="font-size:11px">Geokodowanie: © OpenStreetMap / Nominatim (tylko po kliknięciu, wynik zapamiętywany). Apteki: OSM Overpass / cannapreis.de.</p></div>`;
- if(SR.loading)h+=`<div class="card muted">⏳ Szukam…</div>`;if(SR.err)h+=`<div class="warn">⚠️ ${esc(SR.err)}</div>`;
- if(r){const cn=COUNTRIES[r.cc]||r.cc;const withP=r.src=='de'?r.L.filter(x=>x.offers.length).length:0;
+ 
+ if(r){const cn=COUNTRIES[r.cc]||r.cc;h+='<div id="srres"></div>'+(SR.notes||[]).map(n=>`<div class="warn">ℹ️ ${esc(n)}</div>`).join('');const withP=r.src=='de'?r.L.filter(x=>x.offers.length).length:0;
   h+=`<div class="dr">📍 <b>${esc(r.g.name.split(',').slice(0,3).join(','))}</b> → apteki: <b>${r.cc} ${esc(cn)}</b> · ${r.L.length} wyników${r.src=='de'?` (${withP} z cenami)`:''}</div>`;
   if(SR.via)h+=`<div class="warn" style="border-color:#f59e0b">⚠️ <b>Tryb zapasowy:</b> serwer Overpass jest niedostępny, więc apteki pobrano z wyszukiwarki Nominatim (OpenStreetMap). Wyniki mogą być niepełne (maks. 50, w prostokącie wokół miasta).</div>`;if(CNOTE[r.cc])h+=`<div class="warn">${CNOTE[r.cc]}</div>`;else if(r.src=='osm')h+=`<div class="warn">ℹ️ Dla ${esc(cn)} nie mamy danych o cenach ani o tym, które apteki wydają konopie medyczne. Pokazujemy wszystkie apteki z OpenStreetMap – <b>ceny niedostępne – zadzwoń</b> i zapytaj o konopie na receptę.</div>`;
   if(r.cc=='PL'&&PLP){const L=(PLP.products||[]).filter(p=>p.price!=null).sort((x,y)=>x.price-y.price).slice(0,6);h+=`<div class="card"><h3>🇵🇱 Ceny „od” w Polsce (najtańsze)</h3>${L.map(p=>`<div class="row"><span>${esc(p.name)} · THC ${p.thc??'–'}%<br><small class="muted">opak. ${p.pack} ${p.unit} od ${zl(p.pack_price_from)} zł${p.pharmacies_url?` · <a href="${esc(p.pharmacies_url)}" target="_blank">które apteki mają ↗</a>`:''}</small></span><b>${zl(p.price)} zł/${p.unit}</b></div>`).join('')}<p class="muted">Źródło: receptamarihuana.pl, ${PLP.updated?new Date(PLP.updated).toLocaleDateString(S.lang):''}</p></div>`}
@@ -427,7 +427,7 @@ const _renderSearch0=renderSearch;
 renderSearch=function(a,h18){
  const tsel=[[30,'30 min'],[60,'1 h'],[90,'1,5 h'],[120,'2 h'],[180,'3 h'],[240,'4 h'],[999,'bez limitu']];
  const form=`<div class="card"><h3>🏥 Apteki z medyczną marihuaną – szukaj w Europie</h3>
- <label>Start (miasto lub GPS)</label><div style="display:flex;gap:6px"><input id="sq" placeholder="np. Papendrecht, Warszawa, Berlin" value="${esc(SR.q)}" onkeydown="if(event.key=='Enter')doSearch()" style="margin:4px 0"><button class="btn g" onclick="srGps()" title="GPS">📡</button></div>
+ <label>Start (miasto lub GPS)</label><div style="display:flex;gap:6px"><input id="sq" placeholder="np. Papendrecht, Warszawa, Berlin" value="${esc(SR.q)}" enterkeyhint="search" autocomplete="off" onkeydown="if(event.key=='Enter'||event.keyCode==13){event.preventDefault();this.blur();doSearch()}" style="margin:4px 0"><button class="btn g" onclick="srGps()" title="GPS">📡</button></div>
  <label style="display:flex;align-items:center;gap:6px;font-size:14px"><input type="checkbox" style="width:auto" ${SR.other?'checked':''} onchange="SR.other=this.checked;if(!SR.cc)SR.cc='DE';render()"> szukaj w innym kraju</label>
  ${SR.other?`<select onchange="SR.cc=this.value;render()">${Object.entries(COUNTRIES).map(([k,n])=>`<option value="${k}" ${SR.cc==k?'selected':''}>${k} – ${n}</option>`).join('')}</select>`:'<p class="muted" style="margin:2px 0 8px">Domyślnie: apteki w kraju miasta startowego.</p>'}
  <label>Środek transportu</label><div class="seg">${Object.entries(MODES).map(([k,v])=>`<button class="${SR.mode==k?'on':''}" onclick="SR.mode='${k}';render()">${v[0]}</button>`).join('')}</div>
@@ -435,7 +435,7 @@ renderSearch=function(a,h18){
  <input type="range" min="15" max="360" step="15" value="${Math.min(SR.tmax,360)}" onchange="SR.tmax=+this.value;render()">
  <div class="grid2"><div><label>Ilość (g)</label><input type="number" min="1" value="${SR.qty}" onchange="SR.qty=Math.max(1,+this.value||10);render()"></div><div><label>Sortuj</label><select onchange="SR.sort=this.value;render()"><option value="price" ${SR.sort=='price'?'selected':''}>💶 cena łączna</option><option value="time" ${SR.sort=='time'?'selected':''}>⏱ czas dojazdu</option></select></div></div>
  <label style="display:flex;align-items:center;gap:6px;font-size:14px"><input type="checkbox" style="width:auto" ${SR.fuel?'checked':''} onchange="SR.fuel=this.checked;render()"> dolicz koszt dojazdu (tam i z powrotem)</label>
- <button class="btn" style="width:100%" onclick="doSearch()">🔎 Szukaj</button>
+ <button type="button" class="btn" style="width:100%" ${SR.loading?'disabled style="width:100%;opacity:.7"':''} onclick="doSearch()">${SR.loading?'⏳ Szukam…':'🔎 Szukaj'}</button><div id="srstat" class="muted" style="margin-top:4px;font-weight:600">${SR.loading?'⏳ '+esc(SR.step||''):''}</div>${SR.err&&!SR.loading?`<div class="warn" style="margin-top:6px;border-color:#b91c1c;color:#7f1d1d">❌ ${esc(SR.err)}</div>`:''}
  <p class="muted" style="font-size:11px">Czas: OSRM (routing.openstreetmap.de / project-osrm.org), auto/rower/pieszo. 🚆 = szacunek heurystyczny (odległość×1,3, 30–75 km/h + 25 min na dojścia/przesiadki) – nie rozkład jazdy. Paliwo: 7 l/100 km × 1,85 €/l; bilet ≈ 0,17 €/km – orientacyjnie. Geokodowanie © OpenStreetMap/Nominatim.</p></div>`;
  if(!SR.res){_renderSearch0(a,h18);const c=a.querySelector('.card');if(c)c.outerHTML=form;return}
  const r=SR.res,L0=r.L;r.L=sortRes(L0);_renderSearch0(a,h18);r.L=L0;
@@ -447,7 +447,60 @@ renderSearch=function(a,h18){
   e.insertAdjacentHTML('beforeend',`<div class="bd" style="margin-top:4px">${x.km!=null?`🛣️ ${x.km.toFixed(0)} km · ${MODES[SR.mode][0].split(' ')[0]} ${x.tt} min${x.est?' <i>(szacunek)</i>':''}`:''}${x.pickup===true?' · ✅ odbiór osobisty':''}${p!=null?` · Suma: ${fP(p)} € × ${SR.qty} g${tc?` + dojazd ${fP(tc)} €`:''} = <b>${fP(p*SR.qty+tc)} €</b>`:''}</div>`)});
  if(!L0.length)a.insertAdjacentHTML('beforeend',`<div class="warn">Brak aptek w zasięgu ${SR.tmax} min. Zwiększ limit czasu.</div>`)};
 
+/* ---------- v4.0.1: robust search (timeouts, retries, fallbacks, visible status) ---------- */
+SR.step='';SR.notes=[];
+async function fetchT(u,opt={},ms=10000,tries=2){let last;for(let i=0;i<tries;i++){const ac=new AbortController();const tm=setTimeout(()=>ac.abort(),ms);
+ try{const r=await fetch(u,{...opt,signal:ac.signal});clearTimeout(tm);if(r.status==429||r.status>=500){last=new Error('HTTP '+r.status);await new Promise(x=>setTimeout(x,1200*(i+1)));continue}return r}catch(e){clearTimeout(tm);last=e.name=='AbortError'?new Error('przekroczono czas ('+ms/1000+' s)'):e;await new Promise(x=>setTimeout(x,600))}}throw last}
+function step(s){SR.step=s;const e=document.getElementById('srstat');if(e)e.textContent='⏳ '+s}
+async function nominatim(q){const k=q.toLowerCase().trim();if(geoCache[k])return geoCache[k];let g=null,errs=[];
+ step('Szukam miasta (Nominatim)…');
+ try{const w=1100-(Date.now()-lastNom);if(w>0)await new Promise(r=>setTimeout(r,w));lastNom=Date.now();
+  const r=await fetchT('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&accept-language=pl&email=mikry119-cloud%40users.noreply.github.com&q='+encodeURIComponent(q),{},9000,2);
+  if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();if(j.length)g={lat:+j[0].lat,lon:+j[0].lon,name:j[0].display_name,cc:(j[0].address&&j[0].address.country_code||'').toUpperCase()}}catch(e){errs.push('Nominatim: '+e.message)}
+ if(!g){step('Szukam miasta (Photon – zapasowy)…');
+  try{const r=await fetchT('https://photon.komoot.io/api/?limit=1&q='+encodeURIComponent(q),{},9000,2);if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();const f=j.features&&j.features[0];
+   if(f){const p=f.properties;g={lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0],name:[p.name,p.state,p.country].filter(Boolean).join(', '),cc:(p.countrycode||'').toUpperCase()};SR.notes.push('Miasto znalezione przez Photon (komoot) – Nominatim nie odpowiedział.')}}catch(e){errs.push('Photon: '+e.message)}}
+ if(!g)throw new Error(errs.length?'Nie udało się zlokalizować miasta – serwery geokodowania nie odpowiadają ('+errs.join('; ')+'). Sprawdź internet i spróbuj ponownie.':'Nie znaleziono miasta „'+q+'”. Sprawdź pisownię.');
+ geoCache[k]=g;try{localStorage.setItem('blisko4gc',JSON.stringify(geoCache))}catch(e){}return g}
+async function overpass0(lat,lon,cc){step('Szukam aptek (Overpass)…');
+ for(const R of [8000,30000,120000]){const q=`[out:json][timeout:20];area["ISO3166-1"="${cc}"][admin_level=2]->.c;nwr(around:${R},${lat},${lon})["amenity"="pharmacy"](area.c);out center 80;`;
+  const r=await fetchT('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}},12000,1);
+  if(!r.ok)throw new Error('Overpass HTTP '+r.status);const j=await r.json();
+  const L=j.elements.map(e=>({name:(e.tags&&(e.tags.name||e.tags.brand))||'Apteka',lat:e.lat??e.center?.lat,lon:e.lon??e.center?.lon,addr:[e.tags?.['addr:street'],e.tags?.['addr:housenumber'],e.tags?.['addr:city']].filter(Boolean).join(' '),phone:e.tags?.phone||e.tags?.['contact:phone']||'',web:e.tags?.website||e.tags?.['contact:website']||'',hours:e.tags?.opening_hours||''})).filter(x=>x.lat);
+  if(L.length>=5||R==120000)return L}}
+async function nomPharm(lat,lon,cc){step('Szukam aptek (Nominatim – tryb zapasowy)…');for(const dd of [0.12,0.4,1.2]){const w=1100-(Date.now()-lastNom);if(w>0)await new Promise(r=>setTimeout(r,w));lastNom=Date.now();
+ const u=`https://nominatim.openstreetmap.org/search?format=jsonv2&q=pharmacy&countrycodes=${cc.toLowerCase()}&viewbox=${lon-dd*1.6},${lat+dd},${lon+dd*1.6},${lat-dd}&bounded=1&limit=50&extratags=1&addressdetails=1&email=mikry119-cloud%40users.noreply.github.com`;
+ const r=await fetchT(u,{},10000,2);if(!r.ok)continue;const j=await r.json();const L=j.map(e=>({name:e.name||'Apteka',lat:+e.lat,lon:+e.lon,addr:[e.address?.road,e.address?.house_number,e.address?.city||e.address?.town||e.address?.village].filter(Boolean).join(' '),phone:e.extratags?.phone||e.extratags?.['contact:phone']||'',web:e.extratags?.website||e.extratags?.['contact:website']||'',hours:e.extratags?.opening_hours||''}));if(L.length>=5||dd==1.2)return L}return[]}
+function srGps(){if(!navigator.geolocation){SR.err='Ta przeglądarka nie obsługuje GPS – wpisz miasto.';return render()}
+ SR.err='';SR.loading=true;SR.step='Pobieram pozycję GPS…';render();
+ navigator.geolocation.getCurrentPosition(g=>{SR.start={lat:g.coords.latitude,lon:g.coords.longitude,name:'📡 GPS',cc:''};SR.q='📡 GPS';SR.loading=false;doSearch()},
+  e=>{SR.loading=false;SR.err=e.code==1?'Brak zgody na lokalizację (GPS). Zezwól w ustawieniach przeglądarki/aplikacji albo wpisz miasto.':e.code==3?'GPS nie odpowiedział w czasie – wpisz miasto.':'Nie udało się ustalić pozycji – wpisz miasto.';render()},{enableHighAccuracy:false,timeout:15000,maximumAge:300000})}
+async function revCC(g){if(g.cc)return g.cc;try{const r=await fetchT(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=3&lat=${g.lat}&lon=${g.lon}&email=mikry119-cloud%40users.noreply.github.com`,{},8000,1);const j=await r.json();return (j.address&&j.address.country_code||'').toUpperCase()}catch(e){return ''}}
+async function travel(r){const m=MODES[SR.mode],lim=SR.tmax;let C=r.L.filter(x=>x.d/1000<=m[3]*lim/60);let failed=false;
+ if(SR.mode=='pt'){C.forEach(x=>{x.km=x.d/1000*1.3;x.tt=Math.round(25+x.km/(x.km>40?75:30)*60);x.est=1})}
+ else{C=C.slice(0,180);step('Liczę czas dojazdu (OSRM)…');
+  for(let i=0;i<C.length;i+=90){const ch=C.slice(i,i+90);const co=[[r.g.lon,r.g.lat],...ch.map(x=>[x.lon,x.lat])].map(c=>(+c[0]).toFixed(5)+','+(+c[1]).toFixed(5)).join(';');let j=null;
+   const urls=[`https://routing.openstreetmap.de/${m[1]}/table/v1/${m[2]}/${co}?sources=0&annotations=duration,distance`];if(SR.mode=='car')urls.push(`https://router.project-osrm.org/table/v1/driving/${co}?sources=0&annotations=duration,distance`);
+   for(const u of urls){try{const rr=await fetchT(u,{},12000,1);if(rr.ok){const jj=await rr.json();if(jj.code=='Ok'){j=jj;break}}}catch(e){}}
+   if(!j){failed=true;ch.forEach(x=>{x.km=x.d/1000*1.3;x.tt=Math.round(x.km/({car:70,bike:15,foot:4.5}[SR.mode]||50)*60);x.est=1});continue}
+   ch.forEach((x,k)=>{const s=j.durations[0][k+1],dd=j.distances?j.distances[0][k+1]:null;if(s!=null){x.tt=Math.round(s/60);x.km=dd!=null?dd/1000:x.d/1000*1.3}else{x.km=x.d/1000*1.3;x.tt=Math.round(x.km/70*60);x.est=1}})}}
+ if(failed)SR.notes.push('Serwer tras OSRM nie odpowiedział – czasy dojazdu SZACOWANE z odległości w linii prostej (×1,3), oznaczone „(szacunek)”.');
+ if(SR.mode=='pt')SR.notes.push('🚆 Czas komunikacją to szacunek, nie rozkład jazdy.');
+ r.L=C.filter(x=>x.tt!=null&&x.tt<=lim);r.limited=true}
+async function doSearch(){if(SR.loading&&SR.step!='Pobieram pozycję GPS…')return;const inp=document.getElementById('sq');const q=((inp?inp.value:SR.q)||'').trim();
+ if(!q){SR.err='Wpisz nazwę miasta (np. Papendrecht) albo użyj 📡 GPS.';return render()}
+ SR.loading=true;SR.err='';SR.res=null;SR.lim=20;SR.via='';SR.notes=[];SR.step='Start…';render();
+ try{if(navigator.onLine===false)throw new Error('Brak połączenia z internetem.');let g;
+  if(q=='📡 GPS'&&SR.start){g=SR.start;if(!g.cc){g.cc=await revCC(g);}}else{SR.q=q;g=await nominatim(q)}
+  const cc=(SR.other&&SR.cc)?SR.cc:(g.cc||'');if(!cc)throw new Error('Nie rozpoznano kraju – zaznacz „szukaj w innym kraju” i wybierz kraj.');SR.cc=cc;
+  let L;if(cc=='DE'){step('Wczytuję apteki DE z cenami…');L=dePharm()}else L=await overpass(g.lat,g.lon,cc);
+  if(!L||!L.length)throw new Error('Nie znaleziono aptek w pobliżu ('+cc+'). Spróbuj większego miasta lub innego kraju.');
+  L.forEach(x=>x.d=dist(g.lat,g.lon,x.lat,x.lon));L.sort((a,b)=>a.d-b.d);const r={g,cc,L,src:cc=='DE'?'de':'osm',total:L.length};
+  if(SR.tmax<600)await travel(r);SR.res=r}
+ catch(e){console.error('Blisko search',e);SR.err=(e&&e.message)||String(e)}
+ SR.loading=false;SR.step='';render();setTimeout(()=>{const e=document.getElementById('srres');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+
 render();setTimeout(check,800);loadPrices();loadExtra();addEventListener('online',()=>loadPrices());if(S.age===null)setTimeout(gate,300);
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onload="if(tab=='map'||tab=='biz')render()"></script>
-<script>if('serviceWorker' in navigator&&location.protocol=='https:'&&!window.AndroidNotify)navigator.serviceWorker.register('sw.js').catch(()=>{});</script></body></html>
+<script>if('serviceWorker' in navigator&&location.protocol=='https:'&&!window.AndroidNotify){navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{});let rl=0;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!rl&&!window.SR?.loading){rl=1;location.reload()}})}</script></body></html>
